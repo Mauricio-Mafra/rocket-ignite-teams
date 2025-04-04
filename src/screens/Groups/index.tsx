@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { FlatList } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 import { Container} from './styles';
 
@@ -30,10 +30,13 @@ export function Groups() {
     }
   }
 
-  useEffect(() => {
-    
+  function handleOpenGroup( group: string){
+    navigation.navigate('players', {group});
+  }
+
+  useFocusEffect(useCallback(() => {
     fetchGroups();
-  },[]);
+  },[]));
 
   return (
     <Container>
@@ -49,6 +52,7 @@ export function Groups() {
         renderItem={({item}) => (
           <GroupCard 
           title={item}
+          onPress={() => handleOpenGroup(item)}
           />
         )}
         contentContainerStyle={groups.length === 0 && {flex: 1}}
